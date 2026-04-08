@@ -1,37 +1,50 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <title>SEO Ghost Monitor</title>
-    <style>
-        body { font-family: sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; background: #0a0a0a; color: white; }
-        input { padding: 10px; width: 300px; border-radius: 5px; border: none; }
-        button { padding: 10px 20px; margin-top: 10px; background: #0070f3; color: white; border: none; border-radius: 5px; cursor: pointer; }
-        #result { margin-top: 20px; padding: 20px; background: #1a1a1a; border-radius: 10px; display: none; }
-    </style>
-</head>
-<body>
-    <h1>👻 SEO Ghost Monitor</h1>
-    <p>أدخل رابط الموقع لمراقبته:</p>
-    <input type="text" id="siteUrl" placeholder="https://example.com">
-    <button onclick="checkSite()">فحص الآن</button>
-    <div id="result"></div>
+const axios = require('axios');
+const crypto = require('crypto');
 
-    <script>
-        async function checkSite() {
-            const url = document.getElementById('siteUrl').value;
-            const resDiv = document.getElementById('result');
-            resDiv.style.display = 'block';
-            resDiv.innerHTML = 'جاري الفحص...';
-            
-            try {
-                const response = await fetch(`/api/monitor?url=${url}`);
-                const data = await response.json();
-                resDiv.innerHTML = `<pre>${JSON.stringify(data, null, 2)}</pre>`;
-            } catch (e) {
-                resDiv.innerHTML = 'حدث خطأ في الاتصال.';
-            }
-        }
-    </script>
-</body>
-</html>
+module.exports = async (req, res) => {
+  // Extract URL from query parameters
+  const { url } = req.query;
+
+  // Validate URL presence
+  if (!url) {
+    return res.status(400).json({ 
+      error: "Bad Request", 
+      message: "Please provide a target URL in the query string (?url=...)" 
+    });
+  }
+
+  try {
+    // Fetch website content with a professional User-Agent to avoid blocks
+    const response = await axios.get(url, {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+        'Cache-Control': 'no-cache'
+      },
+      timeout: 10000 // 10 seconds timeout to prevent serverless function hang
+    });
+
+    const htmlContent = response.data;
+
+    // Generate a unique MD5 hash (fingerprint) of the HTML content
+    const hash = crypto.createHash('md5').update(String(htmlContent)).digest('hex');
+
+    // Return successful response in English
+    res.status(200).json({
+      status: "success",
+      url: url,
+      current_hash: hash,
+      timestamp: new Date().toISOString(),
+      message: "Ghost analysis completed."
+    });
+
+  } catch (error) {
+    // Handle errors and crashes gracefully
+    res.status(500).json({ 
+      status: "error",
+      error: "Fetch Failed",
+      details: error.message,
+      note: "The target website might be blocking automated requests or is currently offline."
+    });
+  }
+};
