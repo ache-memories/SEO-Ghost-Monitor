@@ -1,27 +1,29 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SEO Ghost Monitor | مراقب الأشباح</title>
+    <title>SEO Ghost Monitor | Pro Edition</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #0d1117; color: #c9d1d9; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; margin: 0; }
-        .card { background: #161b22; padding: 2rem; border-radius: 12px; border: 1px solid #30363d; box-shadow: 0 8px 32px rgba(0,0,0,0.5); width: 90%; max-width: 500px; text-align: center; }
-        h1 { color: #58a6ff; margin-bottom: 1.5rem; font-size: 1.8rem; }
-        input { width: 100%; padding: 12px; margin-bottom: 1rem; border-radius: 6px; border: 1px solid #30363d; background: #0d1117; color: white; box-sizing: border-box; }
-        button { width: 100%; padding: 12px; border-radius: 6px; border: none; background-color: #238636; color: white; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        body { font-family: 'Inter', -apple-system, sans-serif; background-color: #0d1117; color: #c9d1d9; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; margin: 0; }
+        .card { background: #161b22; padding: 2.5rem; border-radius: 16px; border: 1px solid #30363d; box-shadow: 0 10px 40px rgba(0,0,0,0.6); width: 90%; max-width: 550px; text-align: center; }
+        h1 { color: #58a6ff; margin-bottom: 1rem; font-size: 2rem; letter-spacing: -0.5px; }
+        p { color: #8b949e; margin-bottom: 2rem; }
+        input { width: 100%; padding: 14px; margin-bottom: 1.2rem; border-radius: 8px; border: 1px solid #30363d; background: #0d1117; color: white; box-sizing: border-box; font-size: 1rem; outline: none; transition: border 0.3s; }
+        input:focus { border-color: #58a6ff; }
+        button { width: 100%; padding: 14px; border-radius: 8px; border: none; background-color: #238636; color: white; font-weight: 600; cursor: pointer; font-size: 1rem; transition: background 0.3s; }
         button:hover { background-color: #2ea043; }
-        #result { margin-top: 1.5rem; padding: 1rem; border-radius: 6px; background: #0d1117; border: 1px solid #30363d; display: none; text-align: left; font-family: monospace; font-size: 0.9rem; overflow-x: auto; }
-        .loading { color: #8b949e; margin-top: 10px; display: none; }
+        #result { margin-top: 2rem; padding: 1.2rem; border-radius: 8px; background: #0d1117; border: 1px solid #30363d; display: none; text-align: left; font-family: 'Fira Code', monospace; font-size: 0.85rem; overflow-x: auto; }
+        .status-tag { display: inline-block; padding: 4px 8px; border-radius: 4px; font-weight: bold; font-size: 0.75rem; margin-bottom: 10px; }
+        .success { background: rgba(56, 139, 253, 0.15); color: #58a6ff; }
     </style>
 </head>
 <body>
     <div class="card">
         <h1>👻 SEO Ghost Monitor</h1>
-        <p>أدخل رابط الموقع لمراقبته فوراً</p>
-        <input type="text" id="urlInput" placeholder="https://example.com" value="https://www.google.com">
-        <button onclick="checkSite()">فحص التغييرات</button>
-        <div id="loading" class="loading">جاري سحب بيانات الموقع...</div>
+        <p>Track instant SEO changes and site fingerprints</p>
+        <input type="text" id="urlInput" placeholder="Enter target URL (https://...)" value="https://www.google.com">
+        <button onclick="checkSite()">Analyze Website</button>
         <div id="result"></div>
     </div>
 
@@ -29,34 +31,28 @@
         async function checkSite() {
             const urlInput = document.getElementById('urlInput').value;
             const resultDiv = document.getElementById('result');
-            const loading = document.getElementById('loading');
             
-            if (!urlInput) return alert("يرجى إدخال رابط!");
+            if (!urlInput) return alert("Please enter a valid URL");
 
-            resultDiv.style.display = 'none';
-            loading.style.display = 'block';
+            resultDiv.style.display = 'block';
+            resultDiv.innerHTML = '<span style="color: #8b949e">Analyzing ghost signals...</span>';
 
             try {
                 const response = await fetch(`/api/monitor?url=${encodeURIComponent(urlInput)}`);
                 const data = await response.json();
                 
-                loading.style.display = 'none';
-                resultDiv.style.display = 'block';
-                
                 if (response.ok) {
                     resultDiv.innerHTML = `
-                        <span style="color: #7ee787">✅ تم الفحص بنجاح</span><br><br>
-                        <strong>الرابط:</strong> ${data.url}<br>
-                        <strong>البصمة (Hash):</strong><br>
+                        <div class="status-tag success">READY</div><br>
+                        <strong style="color: #8b949e">TARGET:</strong> ${data.url}<br><br>
+                        <strong style="color: #8b949e">FINGERPRINT (MD5):</strong><br>
                         <span style="color: #d2a8ff">${data.current_hash}</span>
                     `;
                 } else {
-                    resultDiv.innerHTML = `<span style="color: #ff7b72">❌ خطأ: ${data.error || 'تعذر الفحص'}</span><br><small>${data.details || ''}</small>`;
+                    resultDiv.innerHTML = `<span style="color: #ff7b72">ERROR: ${data.error || 'Check failed'}</span>`;
                 }
             } catch (err) {
-                loading.style.display = 'none';
-                resultDiv.style.display = 'block';
-                resultDiv.innerHTML = `<span style="color: #ff7b72">❌ فشل الاتصال بالسيرفر</span>`;
+                resultDiv.innerHTML = `<span style="color: #ff7b72">CONNECTION FAILED</span>`;
             }
         }
     </script>
