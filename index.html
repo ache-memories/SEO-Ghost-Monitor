@@ -5,26 +5,48 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SEO Ghost Monitor | Pro Edition</title>
     <style>
-        body { font-family: 'Inter', -apple-system, sans-serif; background-color: #0d1117; color: #c9d1d9; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; margin: 0; }
-        .card { background: #161b22; padding: 2.5rem; border-radius: 16px; border: 1px solid #30363d; box-shadow: 0 10px 40px rgba(0,0,0,0.6); width: 90%; max-width: 550px; text-align: center; }
-        h1 { color: #58a6ff; margin-bottom: 1rem; font-size: 2rem; letter-spacing: -0.5px; }
-        p { color: #8b949e; margin-bottom: 2rem; }
-        input { width: 100%; padding: 14px; margin-bottom: 1.2rem; border-radius: 8px; border: 1px solid #30363d; background: #0d1117; color: white; box-sizing: border-box; font-size: 1rem; outline: none; transition: border 0.3s; }
-        input:focus { border-color: #58a6ff; }
-        button { width: 100%; padding: 14px; border-radius: 8px; border: none; background-color: #238636; color: white; font-weight: 600; cursor: pointer; font-size: 1rem; transition: background 0.3s; }
-        button:hover { background-color: #2ea043; }
+        body { font-family: 'Inter', -apple-system, sans-serif; background-color: #0d1117; color: #c9d1d9; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; min-height: 100vh; margin: 0; padding: 40px 20px; box-sizing: border-box; }
+        .card { background: #161b22; padding: 2.5rem; border-radius: 16px; border: 1px solid #30363d; box-shadow: 0 10px 40px rgba(0,0,0,0.6); width: 100%; max-width: 550px; text-align: center; margin-bottom: 2rem; }
+        h1 { color: #58a6ff; margin-bottom: 0.5rem; font-size: 2rem; letter-spacing: -0.5px; }
+        p.tagline { color: #8b949e; margin-bottom: 2rem; font-size: 0.95rem; }
+        input { width: 100%; padding: 14px; margin-bottom: 1.2rem; border-radius: 8px; border: 1px solid #30363d; background: #0d1117; color: white; box-sizing: border-box; font-size: 1rem; outline: none; transition: 0.3s; }
+        input:focus { border-color: #58a6ff; box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.1); }
+        button { width: 100%; padding: 14px; border-radius: 8px; border: none; background-color: #238636; color: white; font-weight: 600; cursor: pointer; font-size: 1rem; transition: 0.3s; }
+        button:hover { background-color: #2ea043; transform: translateY(-1px); }
         #result { margin-top: 2rem; padding: 1.2rem; border-radius: 8px; background: #0d1117; border: 1px solid #30363d; display: none; text-align: left; font-family: 'Fira Code', monospace; font-size: 0.85rem; overflow-x: auto; }
-        .status-tag { display: inline-block; padding: 4px 8px; border-radius: 4px; font-weight: bold; font-size: 0.75rem; margin-bottom: 10px; }
-        .success { background: rgba(56, 139, 253, 0.15); color: #58a6ff; }
+        
+        /* Support Section Styling */
+        .support-card { width: 100%; max-width: 550px; background: #0d1117; border: 1px dashed #30363d; border-radius: 12px; padding: 1.5rem; text-align: left; }
+        .support-card h3 { color: #f0f6fc; font-size: 1.1rem; margin-top: 0; margin-bottom: 1rem; display: flex; align-items: center; gap: 8px; }
+        .links-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .social-link { color: #8b949e; text-decoration: none; font-size: 0.85rem; padding: 8px; border-radius: 6px; background: #161b22; border: 1px solid #30363d; transition: 0.2s; display: flex; align-items: center; gap: 6px; }
+        .social-link:hover { border-color: #58a6ff; color: #58a6ff; background: #1c2128; }
+        .portfolio { grid-column: span 2; border-color: #f0883e33; color: #f0883e; }
+        .portfolio:hover { border-color: #f0883e; color: #f0883e; }
+        
+        .status-tag { display: inline-block; padding: 4px 8px; border-radius: 4px; font-weight: bold; font-size: 0.75rem; margin-bottom: 10px; background: rgba(56, 139, 253, 0.15); color: #58a6ff; }
     </style>
 </head>
 <body>
+
     <div class="card">
         <h1>👻 SEO Ghost Monitor</h1>
-        <p>Track instant SEO changes and site fingerprints</p>
+        <p class="tagline">Track instant SEO changes and site fingerprints</p>
+        
         <input type="text" id="urlInput" placeholder="Enter target URL (https://...)" value="https://www.google.com">
         <button onclick="checkSite()">Analyze Website</button>
+        
         <div id="result"></div>
+    </div>
+
+    <div class="support-card">
+        <h3>📫 Connect & Support</h3>
+        <div class="links-grid">
+            <a href="https://t.me/adnanzzzz3" target="_blank" class="social-link"><span>✈️</span> Telegram (Support)</a>
+            <a href="https://x.com/adnanzzzz3" target="_blank" class="social-link"><span>🐦</span> X (Twitter)</a>
+            <a href="https://instagram.com/adnanzzzz3" target="_blank" class="social-link"><span>📸</span> Instagram</a>
+            <a href="https://beacons.ai/adnan.hasan" target="_blank" class="social-link portfolio"><span>❤️</span> Support & Portfolio</a>
+        </div>
     </div>
 
     <script>
@@ -35,7 +57,7 @@
             if (!urlInput) return alert("Please enter a valid URL");
 
             resultDiv.style.display = 'block';
-            resultDiv.innerHTML = '<span style="color: #8b949e">Analyzing ghost signals...</span>';
+            resultDiv.innerHTML = '<span style="color: #8b949e">Tracing ghost signals...</span>';
 
             try {
                 const response = await fetch(`/api/monitor?url=${encodeURIComponent(urlInput)}`);
@@ -43,7 +65,7 @@
                 
                 if (response.ok) {
                     resultDiv.innerHTML = `
-                        <div class="status-tag success">READY</div><br>
+                        <div class="status-tag">SIGNAL ACQUIRED</div><br>
                         <strong style="color: #8b949e">TARGET:</strong> ${data.url}<br><br>
                         <strong style="color: #8b949e">FINGERPRINT (MD5):</strong><br>
                         <span style="color: #d2a8ff">${data.current_hash}</span>
