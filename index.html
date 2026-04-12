@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SEO Ghost Engine | Advanced Dashboard</title>
+    <title>SEO Ghost Engine | Pro Dashboard</title>
     <link rel="icon" href="https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/72x72/1f47b.png">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
@@ -54,9 +54,9 @@
         .stat-card { background: var(--card); border: 1px solid var(--border); padding: 24px; border-radius: 16px; text-align: left; }
         .label { color: var(--text-dim); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; display: block; }
         .value { font-size: 1.1rem; font-weight: 600; word-break: break-all; }
-        .score-circle { width: 90px; height: 90px; border-radius: 50%; border: 5px solid var(--accent); display: flex; align-items: center; justify-content: center; font-size: 1.6rem; font-weight: 800; margin: 0 auto 15px; }
+        .score-circle { width: 110px; height: 110px; border-radius: 50%; border: 6px solid var(--accent); display: flex; align-items: center; justify-content: center; font-size: 1.8rem; font-weight: 800; margin: 0 auto 15px; background: rgba(46, 204, 113, 0.05); }
 
-        /* Connect Card - Same as image_65e048 */
+        /* Connect Card */
         .connect-card {
             background: var(--card);
             border: 1px dashed #222;
@@ -136,12 +136,12 @@
     <div class="connect-card">
         <div class="connect-header">📬 Connect & Support</div>
         <div class="social-grid">
-            <a href="https://t.me/adnanzzzz3" class="social-item">✈️ Telegram</a>
-            <a href="https://facebook.com/adnanzzzz3" class="social-item">🔵 Facebook</a>
-            <a href="https://x.com/adnanzzzz3" class="social-item">🐦 X (Twitter)</a>
-            <a href="https://instagram.com/adnanzzzz3" class="social-item">📸 Instagram</a>
+            <a href="https://t.me/adnanzzzz3" class="social-item" target="_blank">✈️ Telegram</a>
+            <a href="https://facebook.com/adnanzzzz3" class="social-item" target="_blank">🔵 Facebook</a>
+            <a href="https://x.com/adnanzzzz3" class="social-item" target="_blank">🐦 X (Twitter)</a>
+            <a href="https://instagram.com/adnanzzzz3" class="social-item" target="_blank">📸 Instagram</a>
         </div>
-        <a href="https://beacons.ai/adnan.hasan" class="support-full-btn">❤️ Support This Project</a>
+        <a href="https://beacons.ai/adnan.hasan" class="support-full-btn" target="_blank">❤️ Support This Project</a>
     </div>
 
     <script>
@@ -151,35 +151,32 @@
             const loader = document.getElementById('loader');
             const url = urlInput.value;
 
-            if (!url) return alert("Please enter a URL.");
+            if (!url) return alert("يرجى ادخال رابط الموقع");
 
             loader.style.display = 'block';
             dashboard.style.display = 'none';
 
             try {
-                // استدعاء الـ API الخاص بك على Vercel
+                // استدعاء ملف monitor.js الموجود في مجلد api
                 const response = await fetch(`/api/monitor?url=${encodeURIComponent(url)}`);
                 const data = await response.json();
 
                 if (response.ok) {
-                    // حساب النتيجة بشكل وهمي للجمالية
-                    let score = 0;
-                    if (data.url) score += 40;
-                    if (data.current_hash || data.fingerprint) score += 60;
-
+                    let score = 100; // قيمة افتراضية للنجاح
                     document.getElementById('scoreValue').innerText = score + '%';
                     document.getElementById('siteTitle').innerText = data.url || url;
-                    document.getElementById('siteHash').innerText = data.current_hash || data.fingerprint || "Scanning Error";
+                    // استخدام المتغيرات الصحيحة من الـ API لضمان ظهور البصمة
+                    document.getElementById('siteHash').innerText = data.current_hash || data.fingerprint || "Error Generating Hash";
                     
                     loader.style.display = 'none';
                     dashboard.style.display = 'grid';
                 } else {
-                    alert("Analysis failed. Make sure the API is working.");
+                    alert("فشل التحليل، يرجى التحقق من الرابط");
                     loader.style.display = 'none';
                 }
             } catch (err) {
                 console.error(err);
-                alert("Connection error to the API.");
+                alert("خطا في الاتصال بالخادم");
                 loader.style.display = 'none';
             }
         }
