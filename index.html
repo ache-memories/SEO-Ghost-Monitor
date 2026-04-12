@@ -3,19 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SEO Ghost Engine | Pro Dashboard</title>
+    <title>SEO Ghost Engine | Pro Audit Dashboard</title>
     <link rel="icon" href="https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/72x72/1f47b.png">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
         :root {
             --bg: #050505;
-            --card: #0f0f0f;
-            --border: #1e1e1e;
+            --card: #0c0c0c;
+            --border: #1a1a1a;
             --accent: #2ecc71;
             --text-main: #ffffff;
-            --text-dim: #a0a0a0;
+            --text-dim: #888888;
             --blue: #3498db;
+            --glass: rgba(255, 255, 255, 0.03);
         }
 
         body {
@@ -23,131 +24,144 @@
             color: var(--text-main);
             font-family: 'Inter', sans-serif;
             margin: 0;
-            padding: 40px 20px;
+            padding: 60px 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
             min-height: 100vh;
+            box-sizing: border-box;
         }
 
-        .hero-section { text-align: center; margin-bottom: 3rem; width: 100%; max-width: 800px; }
-        h1 { font-size: 2.2rem; font-weight: 700; margin-bottom: 10px; letter-spacing: -1px; display: flex; align-items: center; justify-content: center; gap: 15px; }
-        .subtitle { color: var(--text-dim); font-size: 1.1rem; }
+        .hero-section { text-align: center; margin-bottom: 4rem; width: 100%; max-width: 800px; }
+        h1 { font-size: 2.5rem; font-weight: 700; margin-bottom: 12px; letter-spacing: -1.5px; display: flex; align-items: center; justify-content: center; gap: 15px; }
+        .subtitle { color: var(--text-dim); font-size: 1.1rem; font-weight: 400; }
 
         .search-box {
             background: var(--card);
             border: 1px solid var(--border);
-            padding: 8px;
-            border-radius: 14px;
+            padding: 10px;
+            border-radius: 16px;
             display: flex;
             width: 100%;
-            max-width: 600px;
-            margin-bottom: 3rem;
-            transition: 0.3s;
+            max-width: 650px;
+            margin-bottom: 4rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
-        .search-box:focus-within { border-color: var(--accent); box-shadow: 0 0 20px rgba(46, 204, 113, 0.1); }
+        .search-box:focus-within { border-color: var(--accent); box-shadow: 0 0 0 4px rgba(46, 204, 113, 0.1); }
         
         input {
             background: transparent;
             border: none;
             color: white;
-            padding: 12px 18px;
+            padding: 12px 20px;
             flex-grow: 1;
-            font-size: 1rem;
+            font-size: 1.05rem;
             outline: none;
         }
 
         button {
             background: var(--accent);
-            color: black;
+            color: #000;
             border: none;
-            padding: 12px 28px;
-            border-radius: 10px;
+            padding: 12px 32px;
+            border-radius: 12px;
             font-weight: 700;
             cursor: pointer;
-            transition: 0.2s;
+            transition: all 0.2s;
+            font-size: 0.95rem;
         }
-        button:hover { opacity: 0.9; transform: scale(0.98); }
+        button:hover { opacity: 0.9; transform: translateY(-1px); }
+        button:active { transform: translateY(0); }
 
         .dashboard {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
             width: 100%;
             max-width: 1000px;
             display: none;
-            margin-bottom: 4rem;
+            margin-bottom: 5rem;
         }
 
         .stat-card {
             background: var(--card);
             border: 1px solid var(--border);
-            padding: 24px;
-            border-radius: 16px;
+            padding: 32px;
+            border-radius: 20px;
             transition: 0.3s;
+            position: relative;
+            overflow: hidden;
         }
+        .stat-card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(180deg, var(--glass), transparent); pointer-events: none; }
         
-        .label { color: var(--text-dim); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; display: block; }
-        .value { font-size: 1.1rem; font-weight: 600; word-break: break-all; }
-        .score-circle { width: 100px; height: 100px; border-radius: 50%; border: 5px solid var(--accent); display: flex; align-items: center; justify-content: center; font-size: 1.8rem; font-weight: 800; margin: 0 auto 15px; box-shadow: 0 0 20px rgba(46, 204, 113, 0.2); }
+        .label { color: var(--text-dim); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 16px; display: block; font-weight: 600; }
+        .value { font-size: 1.2rem; font-weight: 600; word-break: break-all; line-height: 1.4; }
+        .score-circle { width: 110px; height: 110px; border-radius: 50%; border: 6px solid var(--accent); display: flex; align-items: center; justify-content: center; font-size: 2rem; font-weight: 800; margin: 0 auto 20px; background: rgba(46, 204, 113, 0.05); }
 
-        /* تعديل منطقة الروابط لتكون منظمة في المنتصف */
         .support-footer {
             margin-top: auto;
             width: 100%;
             max-width: 1000px;
             border-top: 1px solid var(--border);
-            padding: 2rem 0;
+            padding: 3rem 0;
             display: flex;
-            justify-content: center; /* وضع العناصر في المنتصف */
+            justify-content: center;
             flex-wrap: wrap;
-            gap: 12px; /* مسافة متساوية بين الأزرار */
+            gap: 16px;
         }
         .social-chip {
             background: var(--card);
             border: 1px solid var(--border);
-            padding: 8px 20px;
-            border-radius: 50px;
+            padding: 12px 28px;
+            border-radius: 14px;
             color: var(--text-dim);
             text-decoration: none;
-            font-size: 0.85rem;
+            font-size: 0.9rem;
+            font-weight: 500;
             transition: 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 120px;
         }
-        .social-chip:hover { border-color: var(--blue); color: var(--blue); background: #111; }
+        .social-chip:hover { border-color: var(--accent); color: var(--text-main); background: #111; }
+        .portfolio-btn { color: #f0883e; border-color: rgba(240, 136, 62, 0.2); }
+        .portfolio-btn:hover { border-color: #f0883e; color: #f0883e; }
 
-        .loading { font-style: italic; color: var(--accent); margin-top: 20px; display: none; }
+        .loading { font-style: normal; color: var(--accent); margin-top: 20px; display: none; font-weight: 500; letter-spacing: 0.5px; }
     </style>
 </head>
 <body>
 
     <div class="hero-section">
         <h1>👻 SEO Ghost Engine</h1>
-        <p class="subtitle">Enterprise-grade website integrity & SEO auditing</p>
+        <p class="subtitle">Next-gen website integrity & SEO auditing platform</p>
     </div>
 
     <div class="search-box">
         <input type="text" id="urlInput" placeholder="https://your-website.com" value="https://www.google.com">
-        <button onclick="analyzeSite()">Run Audit</button>
+        <button onclick="analyzeSite()">Analyze</button>
     </div>
 
-    <div id="loader" class="loading">Initiating deep scan...</div>
+    <div id="loader" class="loading">Deep scanning infrastructure...</div>
 
     <div class="dashboard" id="dashboard">
         <div class="stat-card" style="text-align: center; grid-column: 1 / -1;">
             <div class="score-circle" id="scoreValue">--</div>
-            <span class="label">Overall SEO Health Score</span>
+            <span class="label">SEO Health Index</span>
         </div>
         <div class="stat-card">
-            <span class="label">📡 Site Identity</span>
-            <div class="value" id="siteTitle">Scanning...</div>
+            <span class="label">📡 Destination</span>
+            <div class="value" id="siteTitle">Awaiting input...</div>
         </div>
         <div class="stat-card">
-            <span class="label">🔒 Integrity Fingerprint (MD5)</span>
-            <div class="value" id="siteHash" style="color: var(--accent); font-family: monospace;">--</div>
+            <span class="label">🔒 Site Fingerprint</span>
+            <div class="value" id="siteHash" style="color: var(--accent); font-family: 'SF Mono', monospace; font-size: 1rem;">--</div>
         </div>
         <div class="stat-card">
-            <span class="label">⚙️ Audit Status</span>
-            <div class="value" id="siteStatus" style="color: var(--blue);">Verified</div>
+            <span class="label">⚙️ Verification</span>
+            <div class="value" id="siteStatus" style="color: var(--blue);">Ready</div>
         </div>
     </div>
 
@@ -155,7 +169,7 @@
         <a href="https://t.me/adnanzzzz3" target="_blank" class="social-chip">Telegram</a>
         <a href="https://x.com/adnanzzzz3" target="_blank" class="social-chip">X / Twitter</a>
         <a href="https://facebook.com/adnanzzzz3" target="_blank" class="social-chip">Facebook</a>
-        <a href="https://beacons.ai/adnan.hasan" target="_blank" class="social-chip" style="color: #f0883e;">Support Project</a>
+        <a href="https://beacons.ai/adnan.hasan" target="_blank" class="social-chip portfolio-btn">Support</a>
     </div>
 
     <script>
@@ -164,7 +178,7 @@
             const dashboard = document.getElementById('dashboard');
             const loader = document.getElementById('loader');
 
-            if (!url) return alert("URL required!");
+            if (!url) return alert("Enter target URL.");
 
             loader.style.display = 'block';
             dashboard.style.display = 'none';
@@ -181,16 +195,16 @@
 
                     document.getElementById('scoreValue').innerText = score + '%';
                     document.getElementById('siteTitle').innerText = data.url;
-                    document.getElementById('siteHash').innerText = data.current_hash || data.fingerprint || "N/A";
+                    document.getElementById('siteHash').innerText = data.current_hash || data.fingerprint || "0xNULL";
                     
                     loader.style.display = 'none';
                     dashboard.style.display = 'grid';
                 } else {
-                    alert("Audit failed.");
+                    alert("Scan failed.");
                     loader.style.display = 'none';
                 }
             } catch (err) {
-                alert("Connection error.");
+                alert("Engine offline.");
                 loader.style.display = 'none';
             }
         }
