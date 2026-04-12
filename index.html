@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SEO Ghost Engine | Advanced Dashboard</title>
+    <title>SEO Ghost Engine | Pro Dashboard</title>
     <link rel="icon" href="https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/72x72/1f47b.png">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
@@ -27,10 +27,11 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            min-height: 100vh;
         }
 
         .hero-section { text-align: center; margin-bottom: 3rem; width: 100%; max-width: 800px; }
-        h1 { font-size: 2.2rem; font-weight: 700; margin-bottom: 10px; letter-spacing: -1px; }
+        h1 { font-size: 2.2rem; font-weight: 700; margin-bottom: 10px; letter-spacing: -1px; display: flex; align-items: center; justify-content: center; gap: 15px; }
         .subtitle { color: var(--text-dim); font-size: 1.1rem; }
 
         .search-box {
@@ -68,14 +69,14 @@
         }
         button:hover { opacity: 0.9; transform: scale(0.98); }
 
-        /* Dashboard Grid */
         .dashboard {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 20px;
             width: 100%;
             max-width: 1000px;
-            display: none; /* يظهر فقط عند النتيجة */
+            display: none;
+            margin-bottom: 4rem;
         }
 
         .stat-card {
@@ -85,34 +86,34 @@
             border-radius: 16px;
             transition: 0.3s;
         }
-        .stat-card:hover { border-color: #333; transform: translateY(-5px); }
         
         .label { color: var(--text-dim); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; display: block; }
         .value { font-size: 1.1rem; font-weight: 600; word-break: break-all; }
-        .score-circle { width: 80px; height: 80px; border-radius: 50%; border: 4px solid var(--accent); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; font-weight: 800; margin: 0 auto 15px; }
+        .score-circle { width: 100px; height: 100px; border-radius: 50%; border: 5px solid var(--accent); display: flex; align-items: center; justify-content: center; font-size: 1.8rem; font-weight: 800; margin: 0 auto 15px; box-shadow: 0 0 20px rgba(46, 204, 113, 0.2); }
 
+        /* تعديل منطقة الروابط لتكون منظمة في المنتصف */
         .support-footer {
-            margin-top: 4rem;
+            margin-top: auto;
             width: 100%;
             max-width: 1000px;
             border-top: 1px solid var(--border);
-            padding-top: 2rem;
+            padding: 2rem 0;
             display: flex;
-            justify-content: space-between;
+            justify-content: center; /* وضع العناصر في المنتصف */
             flex-wrap: wrap;
-            gap: 20px;
+            gap: 12px; /* مسافة متساوية بين الأزرار */
         }
         .social-chip {
             background: var(--card);
             border: 1px solid var(--border);
-            padding: 10px 20px;
+            padding: 8px 20px;
             border-radius: 50px;
             color: var(--text-dim);
             text-decoration: none;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             transition: 0.2s;
         }
-        .social-chip:hover { border-color: var(--blue); color: var(--blue); }
+        .social-chip:hover { border-color: var(--blue); color: var(--blue); background: #111; }
 
         .loading { font-style: italic; color: var(--accent); margin-top: 20px; display: none; }
     </style>
@@ -136,26 +137,24 @@
             <div class="score-circle" id="scoreValue">--</div>
             <span class="label">Overall SEO Health Score</span>
         </div>
-
         <div class="stat-card">
             <span class="label">📡 Site Identity</span>
             <div class="value" id="siteTitle">Scanning...</div>
         </div>
-
         <div class="stat-card">
             <span class="label">🔒 Integrity Fingerprint (MD5)</span>
             <div class="value" id="siteHash" style="color: var(--accent); font-family: monospace;">--</div>
         </div>
-
         <div class="stat-card">
-            <span class="label">⚙️ Server Status</span>
-            <div class="value" id="siteStatus" style="color: var(--blue);">Active</div>
+            <span class="label">⚙️ Audit Status</span>
+            <div class="value" id="siteStatus" style="color: var(--blue);">Verified</div>
         </div>
     </div>
 
     <div class="support-footer">
         <a href="https://t.me/adnanzzzz3" target="_blank" class="social-chip">Telegram</a>
         <a href="https://x.com/adnanzzzz3" target="_blank" class="social-chip">X / Twitter</a>
+        <a href="https://facebook.com/adnanzzzz3" target="_blank" class="social-chip">Facebook</a>
         <a href="https://beacons.ai/adnan.hasan" target="_blank" class="social-chip" style="color: #f0883e;">Support Project</a>
     </div>
 
@@ -175,20 +174,19 @@
                 const data = await response.json();
 
                 if (response.ok) {
-                    // محاكاة نظام التقييم (Scoring Logic)
                     let score = 0;
-                    if (data.url) score += 30;
-                    if (data.current_hash || data.fingerprint) score += 40;
-                    if (data.title || data.url.length > 5) score += 30; // افتراض وجود محتوى
+                    if (data.url) score += 35;
+                    if (data.current_hash || data.fingerprint) score += 45;
+                    if (url.startsWith('https')) score += 20;
 
                     document.getElementById('scoreValue').innerText = score + '%';
                     document.getElementById('siteTitle').innerText = data.url;
-                    document.getElementById('siteHash').innerText = data.current_hash || data.fingerprint;
+                    document.getElementById('siteHash').innerText = data.current_hash || data.fingerprint || "N/A";
                     
                     loader.style.display = 'none';
                     dashboard.style.display = 'grid';
                 } else {
-                    alert("Error scanning site. Please check the URL.");
+                    alert("Audit failed.");
                     loader.style.display = 'none';
                 }
             } catch (err) {
