@@ -4,6 +4,8 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-black?logo=vercel)](https://vercel.com)
 
+![SEO Ghost Monitor](https://github.com/adnanzzzz3/SEO-Ghost-Monitor/raw/ab0c4d1499f49f2a7b9e2a1197eb9836f9fec809/%20SEO%20Ghost%20Monitor.jpeg)
+
 **SEO Ghost Monitor** is a professional, lightweight web integrity tool designed for SEO specialists and web administrators. It provides instant digital fingerprinting to track stealthy changes in your website's meta tags and configurations.
 
 ---
